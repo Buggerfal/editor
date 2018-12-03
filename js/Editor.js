@@ -52,7 +52,20 @@ class Editor extends Sprite {
 
         this.app.stage.addChild(circle);
 
+        let fix = circle.addChild(new PIXI.Graphics()
+            .beginFill(0x005577, 1)
+            .drawRect(-10, -10, 10, 10)
+            .endFill());
+
+        fix.x = circle.width / 2;
+        fix.y = circle.height / 2;
+
         circle.on('pointerdown', this.activate, circle);
+        fix.on('pointerdown', this.drag, fix);
+    }
+
+    drag() {
+        console.log(this);
     }
 
     activate() {
@@ -63,6 +76,8 @@ class Editor extends Sprite {
                 .drawCircle(0, 0, 60)
                 .endFill();
             this.isActive = false;
+
+
             return;
         }
 
