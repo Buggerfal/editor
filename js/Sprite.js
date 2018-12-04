@@ -12,7 +12,7 @@ class Sprite {
     createSprite(options) {
         const finalOptions = Object.assign(this.defaultOptions, options);
 
-        const sprite = PIXI.Sprite.fromImage(finalOptions.path.textureCacheIds);
+        const sprite = PIXI.Sprite.fromImage(window.sprite.complete);
 
         sprite.anchor.set(0.5);
         sprite.width = finalOptions.width;

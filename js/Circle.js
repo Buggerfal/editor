@@ -1,18 +1,27 @@
-class Circle {
-    constructor() {
-        // this.x = x;
-        // this.y = y;
+class Circle extends PIXI.Graphics {
+    constructor(radius, color) {
+        super();
+        PIXI.Graphics.call(this);
 
-        this.drawCircle();
+        this.radius = radius;
+        this.color = color || 0x005577;
+        this.addSprite();
+        // this.addSprite();        
     }
 
-    drawCircle() {
-        this.graphics = new PIXI.Graphics()
-            .lineStyle(10)
+    addSprite() {
+        this
+            .lineStyle(Math.max(1, Math.round(this.radius * 0.1)))
             .beginFill(0x005577, 1)
-            .drawCircle(100, 100, 60)
+            .drawCircle(0, 0, this.radius)
             .endFill();
 
-        return this.graphics;
+        this.addEvents();
+    }
+
+    addEvents() {
+        this.on('pointerdown', () => {
+            console.log(3);
+        }, this);
     }
 }

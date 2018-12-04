@@ -6,10 +6,23 @@ class Editor extends Sprite {
         super();
 
         this.app = null;
+
+        this.btnAddCircle = null;
+        this.btnCircleText = null;
+
+        this.btnCircleMove = null;
+        this.btnMoveText = null;
+        this.btnComplete = null;
+
         this.width = width;
         this.height = height;
+
+        this.isMoving = false;
+
+        this.circles = [];
         this.initApp(width, height);
         this.drawButtons();
+        this.addBtnComplete();
     }
 
     initApp() {
@@ -17,10 +30,51 @@ class Editor extends Sprite {
         document.body.appendChild(this.app.view);
     }
 
+    addBtnComplete() {
+        this.btnComplete = this.createSprite({
+            width: 100,
+            height: 100,
+            x: this.width - 100,
+            y: 100,
+            interactive: true
+        });
+
+        this.btnComplete.visible = false;
+        this.app.stage.addChild(this.btnComplete);
+
+        this.btnComplete.on('pointerdown', this.resetEvents, this);
+    }
+
+    resetEvents() {
+        this.btnComplete.visible = false;
+        this.btnAddCircle.interactive = true;
+
+        this.circles.forEach((el) => {
+            el.off("pointerdown", this.onShapeMoveStart);
+            el.off("pointerdown", this.onShapeMove);
+            el.off("pointermove", this.onShapeMove);
+            el.off("pointerup", this.onShapeMoveEnd);
+            el.off("pointerupoutside", this.onShapeMoveEnd);
+            el.interactive = true;
+        });
+    }
+
+    drawCircle() {
+        var circle = this.app.stage.addChild(new Circle(60, 255));
+        circle.position.set(this.width / 2, this.height / 2);
+
+        this.circles.push(circle);
+    }
+
     drawButtons() {
-        var self = this
+        this.btnCircle();
+        this.btnMove();
+    }
+
+    btnCircle() {
+        var self = this;
+
         this.btnAddCircle = this.drawButton(200, 50);
-        this.app.stage.addChild(this.btnAddCircle);
         this.btnAddCircle.x = 100;
         this.btnAddCircle.y = 100;
 
@@ -35,59 +89,62 @@ class Editor extends Sprite {
         btnCircleText.x = this.btnAddCircle.width / 2;
         btnCircleText.y = this.btnAddCircle.height / 2;
 
+        this.app.stage.addChild(this.btnAddCircle);
         this.btnAddCircle.addChild(btnCircleText);
     }
 
-    drawCircle() {
-        let circle = new PIXI.Graphics()
-            .lineStyle(1)
-            .beginFill(0x005577, 1)
-            .drawCircle(0, 0, 60)
-            .endFill();
+    btnMove() {
+        this.btnCircleMove = this.drawButton(200, 50);
+        this.btnCircleMove.x = 400;
+        this.btnCircleMove.y = 100;
 
-        circle.x = this.width / 2;
-        circle.y = this.height / 2;
+        this.btnCircleMove.interactive = true;
 
-        circle.interactive = true;
+        this.btnCircleMove.on('pointerdown', this.subscribeShapesMove, this);
 
-        this.app.stage.addChild(circle);
+        var btnMoveText = this.drawText('MOVE');
 
-        let fix = circle.addChild(new PIXI.Graphics()
-            .beginFill(0x005577, 1)
-            .drawRect(-10, -10, 10, 10)
-            .endFill());
+        btnMoveText.x = this.btnCircleMove.width / 2;
+        btnMoveText.y = this.btnCircleMove.height / 2;
 
-        fix.x = circle.width / 2;
-        fix.y = circle.height / 2;
-
-        circle.on('pointerdown', this.activate, circle);
-        fix.on('pointerdown', this.drag, fix);
+        this.app.stage.addChild(this.btnCircleMove);
+        this.btnCircleMove.addChild(btnMoveText);
     }
 
-    drag() {
-        console.log(this);
+    subscribeShapesMove() {
+        this.btnComplete.visible = true;
+        this.btnAddCircle.interactive = false;
+
+        this.circles.forEach((el) => {
+            el.off("pointerdown", this.onShapeMoveStart);
+            el.off("pointerdown", this.onShapeMove);
+            el.off("pointermove", this.onShapeMove);
+            el.off("pointerup", this.onShapeMoveEnd);
+            el.off("pointerupoutside", this.onShapeMoveEnd);
+            el.interactive = true;
+        });
     }
 
-    activate() {
-        if (this.isActive) {
-            this.clear();
-            this.lineStyle(1)
-                .beginFill(0x005577, 1)
-                .drawCircle(0, 0, 60)
-                .endFill();
-            this.isActive = false;
-
-
-            return;
-        }
-
-        this.isActive = true;
-
-        this.clear();
-        this.lineStyle(1)
-            .beginFill(0x000077, 1)
-            .drawCircle(0, 0, 60)
-            .endFill();
+    onShapeMoveStart(event) {
+        this.isMoving = true;
+        this.moveOffset = event.data.getLocalPosition(this);
+        this.moveOffset.x = Math.floor(this.moveOffset.x * this.scale.x);
+        this.moveOffset.y = Math.floor(this.moveOffset.y * this.scale.y);
     }
 
+    onShapeMove(event) {
+        if (!this.isMoving) { return };
+
+        var point = event.data.getLocalPosition(this.parent);
+
+        point.x = Math.floor(point.x);
+        point.y = Math.floor(point.y);
+
+        this.position.set(point.x - this.moveOffset.x, point.y - this.moveOffset.y);
+    }
+
+    onShapeMoveEnd(event) {
+        this.isMoving = false;
+        this.moveOffset = { x: 0, y: 0 };
+    };
 }
