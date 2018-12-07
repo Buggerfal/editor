@@ -1,4 +1,4 @@
-const images = [window.sprite['complete']]
+const images = ['complete', window.sprite.complete]
 
 PIXI.loader
     .add(images)

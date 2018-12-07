@@ -9,10 +9,10 @@ class Sprite {
         }
     }
 
-    createSprite(options) {
+    createSprite(options, name) {
         const finalOptions = Object.assign(this.defaultOptions, options);
 
-        const sprite = PIXI.Sprite.fromImage(window.sprite.complete);
+        const sprite = PIXI.Sprite.fromImage(name);
 
         sprite.anchor.set(0.5);
         sprite.width = finalOptions.width;
