@@ -12,7 +12,7 @@ class Circle extends PIXI.Graphics {
         this.addSprite(this.radius);
         this.addFlag(this.radius);
 
-        this.on('pointerdown', this.activate, this);
+        // this.on('pointerdown', this.activate, this);
     }
 
     addSprite(radius) {
@@ -43,11 +43,7 @@ class Circle extends PIXI.Graphics {
     }
 
     activate() {
-        console.log(4444, this.isActive)
-        if (!this.isActive) {
-            return;
-        }
-        console.log(this.isActive)
+        this.isActive = true;
         this.flag.visible = true;
     }
 

@@ -27,7 +27,9 @@ class Editor extends Sprite {
     }
 
     initApp() {
-        this.app = new PIXI.Application(this.width, this.height, { backgroundColor: 0x1099bb });
+        this.app = new PIXI.Application(this.width, this.height, {
+            backgroundColor: 0x1099bb
+        });
         document.body.appendChild(this.app.view);
     }
 
@@ -66,27 +68,20 @@ class Editor extends Sprite {
     drawCircle() {
         var circle = this.app.stage.addChild(new Circle(60, 255));
         circle.position.set(this.width / 2, this.height / 2);
-        circle.on('pointerdown', () => {
-            console.log(this)
-            if (this.isChangeRadiusMode) {
-                circle.isActive = true;
-                circle.activate();
-                // this.activation(circle);
-            }
-        }, this);
+        circle.on('pointerdown', this.activation.bind(this, circle));
         circle.interactive = true;
 
         this.circles.push(circle);
     }
 
 
-    // activation(obj) {
-    //     console.log(obj)
-    //     if (this.isChangeRadiusMode) {
-    //         obj.isActive = true;
-    //         obj.activate();
-    //     }
-    // }
+    activation(obj) {
+        console.log('111', obj)
+        console.log('this.isChangeRadiusMode', this.isChangeRadiusMode)
+        if (this.isChangeRadiusMode) {
+            obj.activate();
+        }
+    }
 
     drawButtons() {
         this.btnCircle();
@@ -104,7 +99,7 @@ class Editor extends Sprite {
 
         this.btnAddCircle.interactive = true;
 
-        this.btnAddCircle.on('pointerdown', function() {
+        this.btnAddCircle.on('pointerdown', function () {
             this.drawCircle();
         }, this);
 
@@ -186,6 +181,7 @@ class Editor extends Sprite {
     }
 
     onBtn() {
+        console.log('zashel')
         this.isChangeRadiusMode = true;
         this.radiusMinus.interactive = true;
         this.radiusPlus.interactive = true;
@@ -214,7 +210,9 @@ class Editor extends Sprite {
     }
 
     onShapeMove(event) {
-        if (!this.isMovingMode) { return };
+        if (!this.isMovingMode) {
+            return
+        };
 
         var point = event.data.getLocalPosition(this.parent);
 
@@ -226,6 +224,9 @@ class Editor extends Sprite {
 
     onShapeMoveEnd(event) {
         this.isMovingMode = false;
-        this.moveOffset = { x: 0, y: 0 };
+        this.moveOffset = {
+            x: 0,
+            y: 0
+        };
     };
 }
