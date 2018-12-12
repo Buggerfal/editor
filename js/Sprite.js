@@ -24,11 +24,21 @@ class Sprite {
         return sprite;
     }
 
-    drawButton(width, height) {
+    drawButton(width, height, text) {
         var graphics = new PIXI.Graphics()
-            .beginFill(0x005577, 1)
+            .beginFill(0xFFFFFF, 1)
             .drawRect(0, -1, width, height)
             .endFill();
+
+        graphics.tint = 0x0000FF;
+        graphics.interactive = true;
+
+        var text = this.drawText(text);
+
+        text.x = graphics.width / 2;
+        text.y = graphics.height / 2;
+
+        graphics.addChild(text);
 
         return graphics;
     }

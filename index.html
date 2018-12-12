@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>CANNABIS</title>
+    <title>EDITOR</title>
 </head>
 
 <body>
+    <div id="test" style="position:absolute; z-index:2; top:100px; left:100px;">
+        <div id="level-editor" v-if="editorMode"></div>
+    </div>
+
     <style type="text/css">
         body {
             margin: 0;
@@ -16,8 +20,12 @@
             overflow: hidden;
         }
     </style>
+
     <script src="js/vendors/pixi.min.js"></script>
     <script src="js/vendors/pixi-sound.js"></script>
+    <script src="js/vendors/vue.js"></script>
+
+    <script src="js/config.js"></script>
     <script src="js/source/images.js"></script>
     <script src="js/Circle.js"></script>
     <script src="js/AssetsLoader.js"></script>
