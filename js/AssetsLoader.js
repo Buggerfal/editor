@@ -5,5 +5,8 @@ PIXI.loader
     .load(setup);
 
 function setup() {
-    let newGame = new Editor(window.innerWidth, window.innerHeight);
+    const w = +prompt('Enter width size in pixels');
+    const h = +prompt('Enter height size in pixels');
+    
+    let newGame = new Editor(w, h);
 }

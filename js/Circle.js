@@ -67,13 +67,6 @@ class Circle extends PIXI.Graphics {
         this.clear();
     }
 
-    changeBackColor(color) {
-        var col = color.slice(1, 7)
-        this.backColor = '0x' + col;
-
-        this.clear();
-    }
-
     clear() {
         this.sprite.clear();
         this.flag.clear();
