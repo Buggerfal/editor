@@ -24,6 +24,7 @@ class Editor extends Sprite {
 
         this.buttons = [];
         this.circles = [];
+        this.settings = [];
 
         this.initApp(width, height);
         this.drawButtons();
@@ -39,6 +40,7 @@ class Editor extends Sprite {
     drawButtons() {
         this.btnCircle();
         this.btnMove();
+        this.getConfig();
         this.addBtnComplete();
     }
 
@@ -47,6 +49,7 @@ class Editor extends Sprite {
         this.btnAddCircle.x = 0;
         this.btnAddCircle.y = 0;
 
+        
         this.btnAddCircle.on('pointerdown', function() {
             this.drawCircle();
         }, this);
@@ -54,6 +57,27 @@ class Editor extends Sprite {
         this.app.stage.addChild(this.btnAddCircle);
 
         this.buttons.push(this.btnAddCircle);
+    }
+
+    getConfig() {
+        this.btnConfig = this.drawButton(200, 50, 'get config');
+        this.btnConfig.x = this.width - 200;
+        this.btnConfig.y = this.height - 50;
+
+        this.btnConfig.on('pointerdown', () => {
+            this.settings = [];
+
+            this.circles.forEach((el) => {
+                this.settings.push({x: el.x, y: el.y});
+            });
+
+            console.log(this.settings);
+        }, this);
+
+
+        this.app.stage.addChild(this.btnConfig);
+
+        this.buttons.push(this.btnConfig);
     }
 
     btnMove() {
