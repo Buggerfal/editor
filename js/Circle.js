@@ -11,7 +11,7 @@ class Circle extends PIXI.Graphics {
         this.backColor = CONFIG.circleColor;
         this.lineWidth = CONFIG.circleLineWidth;
         this.lineColor = CONFIG.circleLineColor;
-
+        console.log('1')
         this.addSprite(this.radius);
         this.addFlag(this.radius);
     }
